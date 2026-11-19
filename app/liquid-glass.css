@@ -1,0 +1,35 @@
+.glass-filter { position: absolute; pointer-events: none; }
+:root {
+  --glass-fill: color-mix(in srgb, var(--surface) 91%, transparent);
+  --glass-rim: light-dark(#ffffffec, #d5edff42);
+  --glass-edge: var(--border);
+  --glass-shadow: light-dark(#17243714, #00000042);
+}
+
+.cabinet-account-menu, .request-dialog {
+  border-color: var(--glass-edge);
+  box-shadow: 0 8px 24px var(--glass-shadow);
+}
+.request-dialog {
+  background: var(--glass-fill);
+  backdrop-filter: url("#cabinet-refraction");
+}
+.account-settings-dialog {
+  background: var(--surface);
+  backdrop-filter: none;
+}
+@media (max-width: 999px) {
+  .cabinet-navigation .request-nav {
+    background: var(--glass-fill);
+    border-top-color: var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-rim);
+    backdrop-filter: url("#cabinet-refraction");
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .request-dialog { background: var(--surface); backdrop-filter: none; }
+  @media (max-width: 999px) {
+    .cabinet-navigation .request-nav { background: var(--surface); backdrop-filter: none; }
+  }
+}

@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="328" height="124" viewBox="0 0 328 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame" clip-path="url(#clip0_0_18)">
+<g id="Group" opacity="0.16">
+<path id="Vector" d="M179 -10V18C179 30 189 40 201 40H211M188 -10V18C188 25 194 31 201 31H211M197 -10V18C197 20 199 22 201 22H211" stroke-width="1.5" stroke="white"/>
+<path id="Vector_2" d="M183.052 65.466L194.79 62.9711C196.951 62.5117 199.075 63.8911 199.534 66.052L202.029 77.7898C202.488 79.9506 201.109 82.0747 198.948 82.534L187.21 85.0289C185.049 85.4882 182.925 84.1089 182.466 81.948L179.971 70.2102C179.512 68.0494 180.891 65.9253 183.052 65.466Z" stroke-width="1.5" stroke="white"/>
+<path id="Vector_3" d="M213 87H218C219.105 87 220 87.8954 220 89V94C220 95.1046 219.105 96 218 96H213C211.895 96 211 95.1046 211 94V89C211 87.8954 211.895 87 213 87Z" stroke-width="1.5" stroke="white"/>
+<path id="Vector_4" d="M290 111H338M290 119H338" stroke-width="1.5" stroke="white"/>
+</g>
+<path id="Vector_5" opacity="0.28" d="M239 57L242 65L250 68L242 71L239 79L236 71L228 68L236 65L239 57Z" fill="white"/>
+<path id="Vector_6" opacity="0.3" d="M161 101C162.105 101 163 100.105 163 99C163 97.8954 162.105 97 161 97C159.895 97 159 97.8954 159 99C159 100.105 159.895 101 161 101Z" fill="white"/>
+  <g fill="white" opacity=".16"><circle cx="261" cy="42" r="2"/><circle cx="271" cy="42" r="2"/><circle cx="261" cy="52" r="2"/><circle cx="271" cy="52" r="2"/></g>
+  <path d="m240 88 8 13h-16z" stroke="white" stroke-width="1.5" opacity=".17"/>
+</g>
+<defs>
+<clipPath id="clip0_0_18">
+<rect width="328" height="124" fill="white"/>
+</clipPath>
+</defs>
+</svg>

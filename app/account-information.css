@@ -1,0 +1,127 @@
+.about-header-row, .about-resource {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.profile-identity .initials { width: 56px; height: 56px; font-size: 20px; }
+.profile-identity > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+.cabinet-shell .profile-identity h2 { font-size: clamp(18px, 2vw, 26px); }
+.profile-identity p { margin-top: 4px; font-size: 13px; }
+
+.profile-layout {
+  display: grid;
+  grid-template-areas: "report" "academic" "security";
+  column-gap: 16px;
+  min-width: 0;
+  align-items: start;
+}
+.profile-panel { display: grid; gap: 8px; min-width: 0; }
+.profile-academic { grid-area: academic; }
+.profile-security { grid-area: security; margin-block-start: 16px; }
+.profile-fields > div { display: grid; gap: 4px; padding-block: 8px; }
+.profile-fields > div + div { border-top: 1px solid var(--border); }
+.profile-fields dt { color: var(--muted); font-size: 12px; }
+.profile-fields dd { font-weight: 500; overflow-wrap: anywhere; }
+.profile-action {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  list-style: none;
+  text-align: start;
+  text-decoration: none;
+}
+.profile-action > span:not(.request-icon-monochrome) { flex: 1; }
+.profile-action .request-icon-monochrome { color: var(--muted); }
+.profile-action:hover { color: var(--link); }
+.profile-report {
+  grid-area: report;
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  min-height: 44px;
+  margin-block-start: -8px;
+  padding-inline: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  text-decoration: none;
+}
+.profile-report:hover { color: var(--link); text-decoration: underline; }
+.profile-exit { align-self: flex-start; }
+.login-copy { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.login-copy > dl { min-width: 0; }
+.login-copy .secondary { flex: none; }
+.login-copy-status { color: var(--muted); font-size: 12px; }
+.profile-signout, .profile-signout:hover { color: var(--danger); }
+.profile-signout .request-icon-monochrome { color: inherit; }
+@media (min-width: 1000px) {
+  .profile-identity, .profile-panel { padding: 20px; }
+  .profile-identity .initials { width: 64px; height: 64px; font-size: 22px; }
+  .profile-layout {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    grid-template-areas: "report ." "academic security";
+  }
+  .profile-security { margin-block-start: 0; }
+}
+
+.help-contacts h2 { margin-bottom: 4px; }
+.help-contact-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.help-contact-row:hover .help-contact-copy > span { text-decoration: underline; }
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--link);
+  flex: none;
+}
+.help-contact-copy { display: grid; gap: 3px; }
+.help-contact-copy small, .help-hours-grid dt, .help-hours-grid dd { font-size: 12px; }
+.help-hours-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.help-hours-grid > div {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+  background: var(--background);
+  border-radius: 12px;
+  padding: 8px;
+}
+.help-hours-grid dt { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.help-hours-grid .request-icon-monochrome { color: var(--link); }
+.help-hours-grid dd { font-weight: 500; }
+.help-faq { display: grid; gap: 16px; scroll-margin-block-start: 16px; }
+.help-faq-heading { display: flex; align-items: center; gap: 12px; }
+.faq-item > summary { list-style: none; cursor: pointer; }
+.faq-item > summary::-webkit-details-marker { display: none; }
+.faq-item[open] > summary > :last-child { transform: rotate(90deg); }
+@media (prefers-reduced-motion: no-preference) {
+  .faq-item > summary > :last-child { transition: transform 170ms ease; }
+}
+.faq-item p { padding: 0 12px 12px; font-size: 13px; }
+.about-header-row .contact-icon { width: 48px; height: 48px; border-radius: 16px; }
+.about-header-row strong { color: var(--link); }
+.about-header-row p, .about-resource p { margin-top: 2px; }
+.about-project h2 { font-size: 24px; }
+.about-info-box { display: flex; align-items: start; gap: 10px; border-radius: 12px; padding: 12px; color: var(--link); background: var(--background); }
+.about-resource .contact-icon { width: 40px; height: 40px; font-size: 18px; font-weight: 600; }
+.about-resources { gap: 16px; }

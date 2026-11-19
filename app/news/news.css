@@ -1,0 +1,5 @@
+.news-list-item { grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 12px; }
+.news-list-item > .request-icon-monochrome { align-self: center; color: var(--link); }
+.news-list-copy { display: grid; gap: 6px; min-width: 0; }
+.news-list-copy .request-row { flex-wrap: wrap; }
+.news-list-copy time { font-size: 12px; }

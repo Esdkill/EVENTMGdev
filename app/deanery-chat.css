@@ -1,0 +1,185 @@
+.deanery-chat {
+  --chat-inset: 16px;
+  --chat-bottom: calc(var(--cabinet-mobile-footer) + 12px);
+  position: fixed;
+  z-index: 8;
+  inset: auto max(var(--chat-inset), var(--safe-right)) var(--chat-bottom) auto;
+}
+
+.deanery-chat-launcher {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 22%);
+  cursor: pointer;
+}
+
+.deanery-chat-launcher .assistant-avatar { width: 46px; height: 46px; border-radius: 15px; }
+.deanery-chat-launcher .assistant-avatar img {
+  position: static;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deanery-chat-window {
+  position: absolute;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  color: var(--text);
+  inset: auto 0 58px auto;
+  width: min(420px, calc(100vw - 2 * var(--chat-inset)));
+  height: min(540px, calc(100dvh - var(--chat-bottom) - 70px));
+  padding: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 22%);
+}
+
+.deanery-chat-window:not([open]) { display: none; }
+.deanery-chat-window,
+.deanery-chat-window :is(h2, p, span, strong, button, input, a) { line-height: 1.4; }
+
+@media (max-width: 999px) {
+  html:has(.deanery-chat-window:modal) { overflow: hidden; }
+  .deanery-chat-window {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    height: min(820px, 94dvh, calc(100dvh - var(--safe-top)));
+    padding-inline: var(--safe-left) var(--safe-right);
+    border-radius: 20px 20px 0 0;
+    border-bottom: 0;
+    transform: translateY(100%);
+  }
+  .deanery-chat-window[open] { transform: translateY(0); }
+  .deanery-chat-window::backdrop { background: rgb(7 14 28 / 58%); }
+  .deanery-chat-window .deanery-chat-composer { padding-bottom: max(12px, var(--safe-bottom)); }
+  .deanery-chat-input input { font-size: 16px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .deanery-chat-window {
+      transition: transform 240ms ease, display 240ms allow-discrete, overlay 240ms allow-discrete;
+    }
+    .deanery-chat-window::backdrop {
+      opacity: 0;
+      transition: opacity 240ms ease, display 240ms allow-discrete, overlay 240ms allow-discrete;
+    }
+    .deanery-chat-window[open]::backdrop { opacity: 1; }
+    @starting-style {
+      .deanery-chat-window[open] { transform: translateY(100%); }
+      .deanery-chat-window[open]::backdrop { opacity: 0; }
+    }
+  }
+}
+
+.deanery-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  gap: 8px;
+  padding: 8px 12px 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.deanery-chat-header h2 { font-size: 18px; }
+.deanery-chat-header h2:focus { outline: none; }
+.deanery-chat-header .icon-button { flex: none; color: var(--link); }
+.deanery-chat-log { display: grid; align-content: start; gap: 12px; overflow: auto; overscroll-behavior: contain; padding: 12px; min-width: 0; }
+.deanery-chat-turn, .deanery-chat-reply, .deanery-chat-suggestions { display: grid; gap: 8px; min-width: 0; }
+.deanery-chat-reply, .deanery-chat-question { border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; white-space: pre-wrap; }
+.deanery-chat-reply { background: var(--background); }
+.deanery-chat-question { justify-self: end; max-width: 90%; background: var(--soft); }
+.deanery-chat-sender { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.deanery-chat-sender .request-icon-monochrome { flex: none; color: var(--link); }
+.deanery-chat-launcher .assistant-avatar > span { border-radius: 12px; }
+.deanery-chat-source { color: var(--link); }
+.deanery-chat-composer { gap: 6px; padding: 10px 12px 12px; border-top: 1px solid var(--border); }
+.deanery-chat-composer p { font-size: 12px; }
+.deanery-chat-input { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 8px; }
+.deanery-chat-input .primary { min-width: 0; min-height: 44px; padding: 0; }
+.deanery-chat-suggestions .secondary { min-height: 42px; white-space: normal; }
+
+.assistant-settings-grid { display: grid; gap: 16px; min-width: 0; }
+.assistant-settings-grid > section { min-width: 0; }
+.assistant-settings-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-connection-menu { border-top: 1px solid var(--border); }
+.assistant-connection-menu summary { cursor: pointer; padding-block: 12px; font-weight: 600; }
+.assistant-connection-menu > .detail-stack { overflow-wrap: anywhere; }
+.assistant-key-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-key-row input { flex: 1 1 160px; }
+.assistant-key-row button { flex: none; }
+.assistant-knowledge-drop { display: grid; justify-items: start; justify-self: stretch; gap: 8px; min-width: 0; padding: 16px; border: 1px dashed var(--field-border); border-radius: var(--control-radius); background: var(--background); }
+.assistant-knowledge-drop.is-dragging { border-color: var(--link); background: var(--soft); }
+.assistant-file-name { overflow-wrap: anywhere; }
+.assistant-knowledge-list { margin: 0; padding: 0; list-style: none; }
+.assistant-knowledge-list li { display: flex; gap: 12px; align-items: center; justify-content: space-between; min-width: 0; padding-block: 8px; border-top: 1px solid var(--border); }
+.assistant-knowledge-list a { min-width: 0; overflow-wrap: anywhere; color: var(--link); }
+.assistant-knowledge-list form { flex: none; }
+
+@media (min-width: 1000px) {
+  .deanery-chat { --chat-inset: 24px; --chat-bottom: 24px; }
+  .assistant-settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+.promo-figure { display: grid; gap: 6px; margin: 0; }
+.promo-figure img, .promo-admin-list img { display: block; width: 100%; aspect-ratio: 4 / 1; object-fit: contain; border-radius: 10px; background: var(--background); }
+.promo-admin-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.promo-admin-list li { border-top: 1px solid var(--border); padding-block: 12px; min-width: 0; overflow-wrap: anywhere; }
+
+.deanery-chat-unread {
+  position: absolute;
+  inset: -2px -2px auto auto;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  background: var(--link);
+}
+.deanery-chat-announcement, .deanery-chat-first-nudge {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .deanery-chat-launcher:has(> .deanery-chat-first-nudge[data-play]) { animation: deanery-chat-nudge 650ms ease-in-out 850ms; }
+  @keyframes deanery-chat-nudge {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    24% { transform: translate(-2px, -6px) rotate(-5deg); }
+    43% { transform: translate(2px, -3px) rotate(4deg); }
+    61% { transform: translate(-1px, 0) rotate(-2deg); }
+    78% { transform: translate(1px, -2px) rotate(2deg); }
+  }
+}
+
+.deanery-chat-launcher :is(.assistant-face-eye, .assistant-wink) { width: 13%; height: 14%; }
+.deanery-chat-launcher .assistant-face-eye-left { top: 29.5%; left: 41%; }
+.deanery-chat-launcher :is(.assistant-face-eye-right, .assistant-wink) { top: 32.5%; left: 62.5%; }
+.deanery-chat-launcher .assistant-face-eye::after { width: 70%; border-top-width: 1px; }
+.deanery-chat-launcher .assistant-wink::after { inset: 50% 15% auto; border-top-width: 1px; }
+
+.deanery-chat-draft {
+  min-width: 0;
+  padding-block-start: 10px;
+  border-top: 1px solid var(--border);
+  white-space: normal;
+}
+.deanery-chat-draft .request-form { gap: 12px; }
+.deanery-chat-draft .request-callout { padding: 10px; }
+.deanery-chat-draft :is(input, select, textarea) { min-width: 0; }
+
+@media (max-width: 999px) {
+  .deanery-chat-draft :is(input, select, textarea) { font-size: 16px; }
+}

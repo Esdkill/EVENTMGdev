@@ -1,0 +1,112 @@
+.cabinet-body { position: relative; }
+#cabinet-loading-slot:empty { display: none; }
+#cabinet-loading-slot { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.section-loading {
+  --loading-fill: var(--neutral-bg);
+  --loading-highlight: color-mix(in srgb, var(--surface) 50%, var(--neutral-bg));
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--background);
+  visibility: hidden;
+  animation: show-section-loading 1ms step-end 160ms forwards;
+}
+@keyframes show-section-loading { to { visibility: visible; } }
+
+.loading-block {
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(105deg, var(--loading-fill) 28%, var(--loading-highlight) 50%, var(--loading-fill) 73%) 0 0 / 220% 100%;
+}
+.loading-line { height: 14px; }
+.loading-small { height: 10px; }
+.loading-title { height: 30px; border-radius: 8px; }
+.loading-button, .loading-field { height: 44px; border-radius: 12px; }
+.loading-textarea { height: 92px; border-radius: 12px; }
+.loading-badge { width: 58px; height: 20px; }
+.loading-icon { width: 36px; height: 36px; border-radius: 10px; }
+.loading-avatar { width: 56px; height: 56px; border-radius: 50%; }
+.loading-ring { width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--loading-fill); background: none; }
+.loading-hint { height: 56px; border-radius: 12px; }
+.loading-meter { height: 8px; }
+.loading-lines { display: grid; min-width: 0; gap: 8px; }
+.loading-fields, .loading-stack, .loading-form, .loading-filters, .loading-card,
+.loading-columns, .loading-home-grid, .loading-home-day, .loading-home-classes {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  gap: 12px;
+}
+.loading-card { padding: 16px; }
+.loading-field-group { display: grid; min-width: 0; gap: 8px; }
+.loading-field-group[data-wide] { grid-column: 1 / -1; }
+.loading-counter { display: flex; min-height: 44px; align-items: center; justify-content: space-between; padding-inline: 12px; border: 1px solid var(--border); border-radius: 12px; }
+.loading-delivery { padding: 3px; background: var(--neutral-bg); border-radius: 12px; }
+.loading-delivery > .loading-field { height: 38px; border-radius: 9px; }
+.loading-inline, .loading-row, .loading-profile, .loading-home-greeting, .loading-grade-summary, .loading-choice {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+}
+.loading-inline > .loading-lines, .loading-row > .loading-lines, .loading-profile > .loading-lines,
+.loading-home-greeting > .loading-lines, .loading-page-header > .loading-lines { flex: 1; }
+.loading-page-header .loading-line, .loading-home-greeting .loading-line { height: 22px; }
+.loading-page-header .loading-small, .loading-home-greeting .loading-small { height: 12px; }
+.loading-pair, .loading-dates, .loading-tabs, .loading-counts { display: grid; gap: 8px; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.loading-tabs .loading-button { height: 38px; }
+.loading-rows { display: grid; gap: 8px; }
+.loading-row { padding: 12px; min-height: 64px; }
+.loading-grouped { padding: 0; gap: 0; }
+.loading-grouped .loading-row + .loading-row { border-top: 1px solid var(--border); }
+.loading-lesson-hero { display: grid; align-content: center; min-height: 164px; gap: 14px; }
+.loading-lesson-row { display: grid; grid-template-columns: 65px minmax(0, 1fr) auto; gap: 10px; align-items: start; min-height: 76px; padding: 12px; }
+.loading-lesson-row + .loading-lesson-row { border-top: 1px solid var(--border); }
+.loading-lesson-row .loading-badge { width: 44px; }
+.loading-lessons-mobile { display: grid; padding: 0; }
+.loading-schedule-toolbar { display: grid; gap: 8px; }
+.loading-home-classes, .loading-table { display: none; }
+.loading-grade-summary { min-height: 104px; justify-content: space-between; }
+.loading-profile { min-height: 90px; }
+.loading-choice { justify-content: space-between; min-height: 36px; }
+@media (min-width: 760px) {
+  .loading-fields-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loading-name-fields > .loading-fields-columns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) {
+  #cabinet-loading-slot { inset-block-start: var(--cabinet-topbar-height); }
+  .loading-mobile-only, .loading-lessons-mobile,
+  .section-loading[data-layout="home"] .loading-page-header { display: none; }
+  .loading-page-header > .loading-icon { display: none; }
+  .loading-page-header .loading-line, .loading-home-greeting .loading-line { height: 30px; }
+  .loading-columns { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 24px; align-items: start; }
+  .loading-home-grid { grid-template-columns: minmax(0, 776fr) minmax(272px, 344fr); gap: 24px; }
+  .loading-home-day { border-radius: 16px; background: var(--surface); padding: 16px; }
+  .loading-lesson-hero { min-height: 176px; background-color: var(--neutral-bg); }
+  .loading-home-classes { display: grid; }
+  .loading-grade-summary { min-height: 168px; padding: 24px; }
+  .loading-ring { width: 106px; height: 106px; }
+  .loading-profile { min-height: 106px; padding: 20px; }
+  .loading-request-form { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .loading-schedule-toolbar { grid-template-columns: 1fr minmax(0, 200px); align-items: center; }
+  .loading-table { display: grid; gap: 0; padding: 0; }
+  .loading-table-row {
+    display: grid;
+    grid-template-columns: minmax(104px, .8fr) minmax(0, 2.1fr) minmax(0, 1.5fr) minmax(96px, .72fr);
+    align-items: center;
+    gap: 12px;
+    min-height: 72px;
+    padding: 16px;
+  }
+  .loading-table-row:first-child { min-height: 46px; }
+  .loading-table-row + .loading-table-row { border-top: 1px solid var(--border); }
+  [data-part="request-table"] .loading-table-row { grid-template-columns: 1.3fr .55fr 1.65fr .9fr .7fr; }
+  .loading-filters .loading-fields { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .loading-filters > .loading-button { width: min(100%, 12rem); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .loading-block:not(.loading-ring) { animation: loading-sweep 1.65s ease-in-out infinite; }
+  @keyframes loading-sweep { to { background-position: -220% 0; } }
+}

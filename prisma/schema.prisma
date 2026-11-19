@@ -1,0 +1,455 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String          @id
+  name            String
+  staffPatronymic String?
+  email           String          @unique
+  emailVerified   Boolean         @default(false)
+  image           String?
+  username        String?         @unique
+  displayUsername String?
+  role            String          @default("student")
+  isDemo          Boolean         @default(false)
+  mustChangePassword Boolean      @default(false)
+  temporaryPasswordExpiresAt DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  studentProfile  StudentProfile?
+  avatar          UserAvatar?
+  avatarUploads   UserAvatarUpload[]
+  documentRequests DocumentRequest[]
+  requestEvents RequestEvent[]
+  requestMessages RequestMessage[]
+  grades          GradeRecord[]
+  threads         DeanThread[]
+  threadMessages  DeanMessage[]
+  notificationReads NotificationRead[]
+  notificationPreferences NotificationPreferences?
+}
+
+model UserAvatar {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   Bytes
+  presetId  String?
+  uploadId  String?  @unique
+  upload    UserAvatarUpload? @relation(fields: [uploadId], references: [id], onDelete: SetNull)
+  updatedAt DateTime @updatedAt
+}
+
+model UserAvatarUpload {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   Bytes
+  createdAt DateTime @default(now())
+  selected  UserAvatar?
+
+  @@index([userId, createdAt, id])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model StudyGroup {
+  code String @id
+}
+
+model StudentProfile {
+  userId     String @id
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group      String
+  year       Int
+  faculty    String
+  program    String
+  firstName  String?
+  lastName   String?
+  patronymic String
+  studentNumber String? @unique
+  recordBookNumber String? @unique
+  recoveryFailures Int @default(0)
+  recoveryWindowStartedAt DateTime?
+}
+
+enum RequestType {
+  enrollment
+  military
+  financial_aid
+  academic_record
+}
+
+enum RequestDelivery {
+  electronic
+  pickup
+}
+
+enum RequestStatus {
+  NEW
+  IN_PROGRESS
+  READY
+  ISSUED
+  REJECTED
+  CANCELLED
+}
+
+model DocumentRequest {
+  id           String            @id @default(uuid())
+  number       Int               @unique @default(autoincrement())
+  ownerId      String
+  owner        User              @relation(fields: [ownerId], references: [id])
+  type         RequestType
+  purpose      String
+  copies       Int
+  delivery     RequestDelivery
+  comment      String
+  status       RequestStatus     @default(NEW)
+  dueOn        DateTime          @db.Date
+  createdAt    DateTime          @default(now())
+  version      Int               @default(0)
+  submissionKey String
+  staffNote    String            @default("")
+  events       RequestEvent[]
+  messages     RequestMessage[]
+  document     RequestDocument?
+
+  @@unique([ownerId, submissionKey])
+  @@index([ownerId, createdAt])
+  @@index([status, createdAt])
+}
+
+model RequestEvent {
+  id          String          @id @default(uuid())
+  requestId   String
+  request     DocumentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actorId     String
+  actor       User            @relation(fields: [actorId], references: [id])
+  fromStatus  RequestStatus?
+  toStatus    RequestStatus
+  reason      String?
+  createdAt   DateTime        @default(now())
+
+  @@index([requestId, createdAt])
+}
+
+model RequestDocument {
+  id        String          @id @default(uuid())
+  requestId String          @unique
+  request   DocumentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  content   Bytes
+  size      Int
+  createdAt DateTime        @default(now())
+}
+
+enum LessonStatus {
+  planned
+  rescheduled
+  cancelled
+}
+
+model Lesson {
+  id          String       @id @default(uuid())
+  group       String
+  cohort      BulletinCohort @default(live)
+  subject     String
+  kind        String
+  teacher     String
+  room        String
+  startsAt    DateTime
+  endsAt      DateTime
+  status      LessonStatus @default(planned)
+  previousAt  DateTime?
+  previousEnd DateTime?
+  changeReason String?
+  version     Int @default(0)
+  previousRoom String?
+
+  @@index([group, cohort, startsAt])
+}
+
+model RequestMessage {
+  id        String          @id
+  requestId String
+  request   DocumentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User            @relation(fields: [authorId], references: [id])
+  text      String
+  createdAt DateTime        @default(now())
+
+  @@index([requestId, createdAt])
+}
+
+enum GradeStatus {
+  passed
+  planned
+  retake
+}
+
+model GradeRecord {
+  id          String      @id
+  ownerId     String
+  owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  semester    Int
+  subject     String
+  teacher     String
+  kind        String
+  score       Int?
+  status      GradeStatus
+  attendance  Int?
+  nextAt      DateTime?
+  checkpoints GradeCheckpoint[]
+
+  @@index([ownerId, semester])
+}
+
+model GradeCheckpoint {
+  id        String      @id
+  gradeId   String
+  grade     GradeRecord @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  title     String
+  points    Int
+  maxPoints Int
+}
+
+enum NotificationKind {
+  deadline
+  schedule
+  request
+  news
+}
+
+enum AudienceKind {
+  all
+  everyone
+  staff
+  faculty
+  year
+  group
+  student
+}
+
+enum BulletinCohort {
+  demo
+  live
+}
+
+enum BulletinPublication {
+  published
+  draft
+  hidden
+}
+
+model Bulletin {
+  id          String           @id @default(uuid())
+  kind        NotificationKind
+  title       String
+  text        String
+  audience    AudienceKind
+  cohort      BulletinCohort?
+  publication BulletinPublication @default(published)
+  featured    Boolean @default(false)
+  version     Int @default(0)
+  target      String?
+  important   Boolean          @default(false)
+  publishAt   DateTime
+  calendarAt  DateTime?
+  href        String?
+  reads       NotificationRead[]
+  attachment  BulletinAttachment?
+
+  @@index([kind, publishAt])
+}
+
+model BulletinAttachment {
+  bulletinId String   @id
+  bulletin   Bulletin @relation(fields: [bulletinId], references: [id], onDelete: Cascade)
+  name       String
+  mime       String
+  content    Bytes
+}
+
+model NotificationRead {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bulletinId String
+  bulletin   Bulletin @relation(fields: [bulletinId], references: [id], onDelete: Cascade)
+
+  @@id([userId, bulletinId])
+}
+
+model NotificationPreferences {
+  userId    String  @id
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deadlines Boolean @default(true)
+  schedule  Boolean @default(true)
+  requests  Boolean @default(true)
+  news      Boolean @default(true)
+}
+
+model DeanThread {
+  id        String        @id @default(uuid())
+  number    Int           @unique @default(autoincrement())
+  ownerId   String
+  owner     User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  topic     String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  staffReadAt DateTime?
+  messages  DeanMessage[]
+
+  @@index([ownerId, updatedAt])
+}
+
+model DeanMessage {
+  id        String     @id
+  threadId  String
+  thread    DeanThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User       @relation(fields: [authorId], references: [id])
+  text      String
+  createdAt DateTime   @default(now())
+  attachment DeanAttachment?
+
+  @@index([threadId, createdAt])
+}
+
+model DeanAttachment {
+  messageId String @id
+  message   DeanMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  name      String
+  mime      String
+  content   Bytes
+}
+
+enum AssistantTone {
+  friendly
+  formal
+  playful
+}
+
+enum AssistantBehavior {
+  clarify
+  direct
+}
+
+enum AssistantApiProtocol {
+  compatible
+  messages
+}
+
+model AssistantSettings {
+  id           String            @id
+  model        String
+  encryptedKey String?
+  provider     String?
+  apiUrl       String               @default("https://openrouter.ai/api/v1")
+  protocol     AssistantApiProtocol @default(compatible)
+  tone         AssistantTone     @default(friendly)
+  behavior     AssistantBehavior @default(clarify)
+  updatedAt    DateTime          @updatedAt
+}
+
+/// Retained from the retired image integration so existing installations keep their saved data.
+model AssistantImageSettings {
+  id           String   @id
+  model        String
+  encryptedKey String
+  updatedAt    DateTime @updatedAt
+
+  @@ignore
+}
+
+model AssistantDocument {
+  id        String            @id @default(uuid())
+  name      String
+  mime      String
+  content   Bytes
+  checksum  String            @unique
+  createdAt DateTime          @default(now())
+  sources   AssistantSource[]
+}
+
+model AssistantSource {
+  id         String             @id @default(uuid())
+  title      String
+  section    String
+  url        String
+  excerpt    String
+  documentId String?
+  document   AssistantDocument? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([documentId])
+}
+
+enum PromoPlacement {
+  home
+  news
+  help
+}
+
+model PromoBanner {
+  id        String         @id @default(uuid())
+  title     String
+  href      String
+  cohort    BulletinCohort
+  placements PromoPlacement[] @default([home])
+  image     Bytes
+  mime      String
+  published Boolean        @default(false)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([cohort, published, createdAt])
+}
