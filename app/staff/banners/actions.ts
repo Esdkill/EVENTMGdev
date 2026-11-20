@@ -13,15 +13,23 @@ const inputs = z.object({
   id: z.uuid(),
   edit: z.literal("yes").optional(),
   title: z.string().trim().min(1).max(160),
-  href: externalHttpsUrl,
-  cohort: z.enum(["demo", "live"]),
+  href: externalHttpsUrl.nullable(),
   placements: z.array(z.enum(Object.keys(promoPlacements) as (keyof typeof promoPlacements)[])).min(1).max(3).transform(items => [...new Set(items)]),
 });
 
 export async function savePromoBanner(_state: { error: string }, form: FormData) {
   if ((await getRequestViewer())?.role !== "staff") return { error: "Публикация доступна сотруднику деканата." };
-  const result = inputs.safeParse({ ...Object.fromEntries(form), placements: form.getAll("placements") });
-  if (!result.success) return { error: "Проверьте название, HTTPS-ссылку и аудиторию. Выберите хотя бы одну страницу показа." };
+  const result = inputs.safeParse({
+    ...Object.fromEntries(form),
+    href: form.get("noHref") === "yes" ? null : form.get("href") ?? undefined,
+    placements: form.getAll("placements"),
+  });
+  if (!result.success) {
+    const linkError = result.error.issues.some(issue => issue.path[0] === "href");
+    return { error: linkError
+      ? "Укажите HTTPS-ссылку или отметьте «Ссылки нет»."
+      : "Проверьте название и выберите хотя бы одну страницу показа." };
+  }
   const { id, edit, ...values } = result.data;
   let attachment: Awaited<ReturnType<typeof readAttachment>>;
   try {

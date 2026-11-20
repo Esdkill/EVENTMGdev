@@ -5,10 +5,11 @@ import { promoImageUrl, promoPlacements, type PromoPlacement } from "../../../li
 import { useRecoverableAction } from "../../recoverable-action";
 import { savePromoBanner } from "./actions";
 
-export type BannerFields = { id: string; title: string; href: string; cohort: "demo" | "live"; placements: PromoPlacement[]; published: boolean };
+export type BannerFields = { id: string; title: string; href: string | null; placements: PromoPlacement[]; published: boolean };
 
 export function BannerForm({ initial, id }: { initial?: BannerFields; id: string }) {
   const [state, submission, pending] = useRecoverableAction(savePromoBanner, { error: "" });
+  const [noHref, setNoHref] = useState(initial?.href === null);
   const [preview, setPreview] = useState<string>();
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
   const imageSrc = preview || (initial && promoImageUrl(initial.id));
@@ -21,13 +22,11 @@ export function BannerForm({ initial, id }: { initial?: BannerFields; id: string
       <input name="title" defaultValue={initial?.title} required maxLength={160} />
     </label>
     <label className="field">Ссылка, которая откроется по нажатию
-      <input name="href" type="url" defaultValue={initial?.href} placeholder="https://…" required maxLength={600} />
+      <input name="href" type="url" defaultValue={initial?.href ?? ""} placeholder="https://…" disabled={noHref} required={!noHref} maxLength={600} />
     </label>
-    <label className="field">Кому показать
-      <select name="cohort" defaultValue={initial?.cohort ?? "demo"}>
-        <option value="demo">Только демо-аккаунтам</option>
-        <option value="live">Только обычным аккаунтам</option>
-      </select>
+    <label className="promo-no-href">
+      <input type="checkbox" name="noHref" value="yes" checked={noHref} onChange={event => setNoHref(event.currentTarget.checked)} />
+      Ссылки нет
     </label>
     <fieldset className="field promo-placement-options">
       <legend>Где показать</legend>

@@ -1,0 +1,1 @@
+ALTER TABLE "PromoBanner" ALTER COLUMN "href" DROP NOT NULL;

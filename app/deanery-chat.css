@@ -133,7 +133,7 @@
 }
 
 .promo-figure { display: grid; gap: 6px; margin: 0; }
-.promo-figure img, .promo-admin-list img { display: block; width: 100%; aspect-ratio: 4 / 1; object-fit: contain; border-radius: 10px; background: var(--background); }
+.promo-figure img, .promo-admin-list img { display: block; width: 100%; aspect-ratio: 4 / 1; object-fit: cover; border-radius: 10px; background: var(--background); }
 .promo-admin-list { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
 .promo-admin-list li { border-top: 1px solid var(--border); padding-block: 12px; min-width: 0; overflow-wrap: anywhere; }
 
@@ -182,4 +182,12 @@
 
 @media (max-width: 999px) {
   .deanery-chat-draft :is(input, select, textarea) { font-size: 16px; }
+}
+
+.deanery-chat-success { display: flex; align-items: flex-start; gap: 8px; }
+.deanery-chat-success > span { color: var(--success-text); font-weight: 700; }
+.deanery-chat-thinking { padding-block: 4px; }
+@media (prefers-reduced-motion: no-preference) {
+  .deanery-chat-thinking { animation: deanery-thinking 1.4s ease-in-out infinite alternate; }
+  @keyframes deanery-thinking { from { opacity: .7; } to { opacity: 1; } }
 }

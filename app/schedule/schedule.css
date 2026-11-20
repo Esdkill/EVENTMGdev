@@ -168,3 +168,9 @@
   .lesson-row small { font-size: 13px; }
   .schedule-notices { padding-inline: 20px; }
 }
+
+.schedule-controls .schedule-mode { position: relative; isolation: isolate; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.schedule-mode::before { content: ""; position: absolute; z-index: -1; inset: 2px auto 2px 2px; width: calc(50% - 2px); border-radius: var(--control-radius); background: var(--surface); }
+.schedule-mode[data-week="true"]::before { transform: translateX(100%); }
+.schedule-controls .schedule-mode a[aria-current] { background: transparent; box-shadow: none; }
+@media (prefers-reduced-motion: no-preference) { .schedule-mode::before { transition: transform 220ms ease; } }

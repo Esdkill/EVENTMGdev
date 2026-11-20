@@ -220,7 +220,7 @@ export default async function StudentCabinet() {
             </div>
           </div>}
         </div>
-        <StudentPromos viewer={viewer} placement="home" />
+        <StudentPromos placement="home" />
         <ProjectLabel />
       </main>
     </CabinetShell>

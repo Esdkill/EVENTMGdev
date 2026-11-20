@@ -1,3 +1,4 @@
+import { ScheduleMode } from "./schedule-mode";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { redirect } from "next/navigation";
@@ -64,10 +65,7 @@ export default async function SchedulePage({ searchParams }: {
               <strong>{weekLabel}–{scheduleDate(lastDay, { day: "numeric", month: "long", year: "numeric" }).replace(/ г\.$/, "")}</strong>
               <Link className="icon-button" href={url(shiftDay(day, 7))} aria-label="Следующая неделя"><Icon name="schedule-next" monochrome /></Link>
             </div>
-            <nav className="schedule-view" aria-label="Режим расписания">
-              <Link href={url(day, "day")} aria-current={!isWeek ? "page" : undefined}>День</Link>
-              <Link href={url(day, "week")} aria-current={isWeek ? "page" : undefined}>Неделя</Link>
-            </nav>
+            <ScheduleMode isWeek={isWeek} dayHref={url(day, "day")} weekHref={url(day, "week")} />
             <Link className="secondary request-button schedule-today" href="/schedule">Сегодня</Link>
             <nav className="schedule-days" style={{ "--day-count": displayDays.length } as CSSProperties} aria-label="Дни недели">
               {displayDays.map(value => (

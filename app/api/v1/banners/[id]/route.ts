@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { attachmentHeaders } from "../../../../../lib/attachments";
 import { db } from "../../../../../lib/db";
-import { visiblePromoBanners } from "../../../../../lib/promo-banners";
 import { getRequestViewer } from "../../../../../lib/viewer";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -9,7 +8,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const id = z.uuid().safeParse((await params).id);
   if (!viewer || !id.success) return new Response(null, { status: 404 });
   const banner = await db.promoBanner.findFirst({
-    where: { id: id.data, ...(viewer.role === "student" ? visiblePromoBanners(viewer) : {}) },
+    where: { id: id.data, ...(viewer.role === "staff" ? {} : { published: true }) },
     select: { image: true, mime: true },
   });
   if (!banner) return new Response(null, { status: 404 });

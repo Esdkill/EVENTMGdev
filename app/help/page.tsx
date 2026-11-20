@@ -54,7 +54,7 @@ export default async function Help() {
           </details>)}
         </div>
       </section>
-      {viewer?.role === "student" && <StudentPromos viewer={viewer} placement="help" />}
+      {viewer?.role === "student" && <StudentPromos placement="help" />}
       <ProjectLabel />
     </main>
   );

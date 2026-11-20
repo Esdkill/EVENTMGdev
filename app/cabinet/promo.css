@@ -1,17 +1,25 @@
-.promo-carousel { display: grid; gap: 4px; min-width: 0; }
+.promo-carousel { display: grid; gap: 4px; min-width: 0; touch-action: pan-y pinch-zoom; }
 .promo-slide { display: grid; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface); color: var(--text); text-decoration: none; }
 .promo-slide[hidden] { display: none; }
-.promo-slide img { width: 100%; aspect-ratio: 4 / 1; object-fit: contain; background: var(--surface); }
-.promo-slide > span { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 12px; }
-.promo-slide > span > span { min-width: 0; overflow-wrap: anywhere; }
-.promo-slide:hover { border-color: var(--link); text-decoration: none; }
+.promo-slide img, .promo-help-banner img { display: block; width: 100%; aspect-ratio: 4 / 1; object-fit: cover; background: var(--surface); }
+a.promo-slide:hover { border-color: var(--link); text-decoration: none; }
+.promo-progress { display: flex; justify-self: center; gap: 4px; max-width: min(180px, 100%); margin-block: 4px 0; }
+.promo-progress-segment { width: 12px; min-width: 0; height: 3px; overflow: hidden; border-radius: 999px; background: var(--border); }
+.promo-progress-segment[data-active="true"] { width: 28px; background: color-mix(in srgb, var(--link) 35%, var(--border)); }
+.promo-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--link);
+  transform-origin: left center;
+  animation: promo-progress linear both;
+}
+@keyframes promo-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
 .promo-controls { display: flex; align-items: center; gap: 4px; justify-content: end; color: var(--muted); font-size: 12px; }
 .promo-controls button { color: var(--link); min-height: 44px; }
 .promo-controls .text-action { padding-inline: 8px; }
-@media (min-width: 1000px) {
-  .promo-slide > span { display: none; }
-}
-
 
 .student-promos { display: grid; gap: 12px; min-width: 0; }
 .student-promos > h2 { font-size: 16px; font-weight: 600; }
@@ -19,7 +27,8 @@
 .promo-link { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 12px; text-decoration: none; }
 .promo-link span:not(.request-icon-monochrome) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .promo-link:hover { border-color: var(--link); }
+.promo-help-banner { margin: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 16px; }
 .promo-placement-options { min-width: 0; border: 0; padding: 0; }
 .promo-placement-options legend { margin-bottom: 8px; }
-.promo-placement-options > label { display: flex; gap: 8px; align-items: center; min-height: 32px; color: var(--text); }
-.cabinet-shell .request-form .promo-placement-options input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; margin: 0; }
+.promo-placement-options > label, .promo-no-href { display: flex; gap: 8px; align-items: center; min-height: 32px; color: var(--text); }
+.cabinet-shell .request-form :is(.promo-placement-options, .promo-no-href) input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; margin: 0; }

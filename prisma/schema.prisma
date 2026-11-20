@@ -442,8 +442,8 @@ enum PromoPlacement {
 model PromoBanner {
   id        String         @id @default(uuid())
   title     String
-  href      String
-  cohort    BulletinCohort
+  href      String?
+  cohort    BulletinCohort?
   placements PromoPlacement[] @default([home])
   image     Bytes
   mime      String
@@ -451,5 +451,5 @@ model PromoBanner {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  @@index([cohort, published, createdAt])
+  @@index([published, createdAt])
 }

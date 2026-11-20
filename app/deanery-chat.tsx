@@ -12,7 +12,7 @@ import { RequestFieldsForm, type RequestDraftEdits } from "./requests/new/reques
 import { Icon } from "./requests/request-ui";
 
 type Reply = Exclude<Awaited<ReturnType<typeof askDeanery>>, { error: string }>;
-type ChatTurn = { id: string; question: string; reply?: Reply; error?: string; draftEdits?: RequestDraftEdits };
+type ChatTurn = { id: string; question: string; reply?: Reply; error?: string; draftEdits?: RequestDraftEdits; requestSent?: boolean };
 type ChatSession = { userId: string; open: boolean; unread: boolean; text: string; turns: ChatTurn[]; lastActivityAt: number | null };
 type Conversation = {
   session: ChatSession | null;
@@ -178,7 +178,7 @@ function ChatWindow({ session, setSession, userId, staff }: {
       ...current,
       lastActivityAt: Date.now(),
       turns: current.turns.map(turn => turn.id === turnId ? {
-        ...turn, draftEdits: undefined, reply: { text: "Заявка отправлена. Статус можно посмотреть в её карточке.",
+        ...turn, draftEdits: undefined, requestSent: true, reply: { text: "Заявка отправлена. Статус можно посмотреть в её карточке.",
           link: { href: `/requests/${requestId}`, label: "Открыть заявку" } },
       } : turn),
     } : current);
@@ -212,7 +212,7 @@ function ChatWindow({ session, setSession, userId, staff }: {
           <p className="deanery-chat-question">{turn.question}</p>
           {turn.reply && <div className="deanery-chat-reply">
             <div className="deanery-chat-sender"><strong>ИИ-помощник деканата</strong><Icon name="assistant-robot" size={18} monochrome /></div>
-            {!turn.reply.draft && <p>{turn.reply.text}</p>}
+            {!turn.reply.draft && <p className={turn.requestSent ? "deanery-chat-success" : undefined}>{turn.requestSent && <span aria-hidden="true">✓</span>}{turn.reply.text}</p>}
             {turn.reply.source && <a className="deanery-chat-source" href={turn.reply.source.url} target="_blank" rel="noopener noreferrer">
               {turn.reply.source.title} · {turn.reply.source.section}
             </a>}
@@ -227,7 +227,7 @@ function ChatWindow({ session, setSession, userId, staff }: {
             <p className="form-error" role="status">{turn.error}</p>
             {turn === last && <button type="button" className="secondary" onClick={() => send(turn.question)}>Повторить</button>}
           </div>}
-          {!turn.reply && !turn.error && <p className="muted">Готовим ответ…</p>}
+          {!turn.reply && !turn.error && <p className="muted deanery-chat-thinking">Ищу информацию для ответа…</p>}
         </div>)}
       </div>
       <form className="deanery-chat-composer request-form" onSubmit={event => { event.preventDefault(); if (session) void send(session.text); }}>

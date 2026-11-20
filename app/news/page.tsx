@@ -38,7 +38,7 @@ export default async function News() {
           </Link>
         </li>)}
       </ul> : <CabinetState icon="staff-announcements" title="Пока нет новостей" />}
-      {viewer?.role === "student" && <StudentPromos viewer={viewer} placement="news" />}
+      {viewer?.role === "student" && <StudentPromos placement="news" />}
       <ProjectLabel />
     </main>
   </CabinetShell>;

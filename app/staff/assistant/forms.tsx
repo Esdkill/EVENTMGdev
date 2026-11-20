@@ -226,13 +226,13 @@ export function AssistantKnowledgeForm() {
         setFileName(files[0].name);
         setDropError("");
       }}>
-      <p>Перетащите документ сюда</p>
+      <p>{dragging ? "Отпустите файл для загрузки" : "Перетащите документ сюда"}</p>
       <button className="secondary" type="button" disabled={pending} onClick={() => input.current?.click()}>Выбрать файл</button>
       <input type="file" name="document" ref={input} hidden accept=".pdf,.docx,.txt,.jpg,.jpeg,.png"
         onChange={event => { setFileName(event.currentTarget.files?.[0]?.name ?? ""); setDropError(""); }} />
       <p className="muted">PDF, DOCX, TXT, JPG или PNG до {knowledgeFileLimitMb} МБ</p>
     </div>
-    {fileName && <p className="assistant-file-name" role="status">{fileName}</p>}
+    {fileName && <p className="assistant-file-name" role="status">{fileName}{pending ? " · Извлекаем текст и добавляем в поиск…" : ""}</p>}
     {(dropError || state.error) && <p className="form-error" role="alert">{dropError || state.error}</p>}
     <div className="assistant-settings-actions">
       <button className="primary" disabled={!fileName || pending}>{pending ? "Обрабатываем документ…" : "Добавить в базу знаний"}</button>
